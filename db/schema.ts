@@ -1,36 +1,39 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-// Categories for organizing your life areas
+// Main categories (these become your tabs)
 export const categories = sqliteTable("categories", {
   id: int().primaryKey({ autoIncrement: true }),
-  name: text().notNull(), // e.g., "Nutrition", "Running", "Reading", "Work"
-  icon: text().notNull(), // emoji or icon name
-  color: text().notNull(), // hex color for visual organization
+  name: text().notNull(), // "Daily", "Nutrition", "Sport", "Culture", "Others"
+  icon: text().notNull(),
+  color: text().notNull(),
+  order: int().notNull(), // for tab ordering
   createdAt: text().notNull(),
 });
 
-// Individual trackable items within categories
-export const trackables = sqliteTable("trackables", {
+// Subcategories within each main category
+export const subcategories = sqliteTable("subcategories", {
   id: int().primaryKey({ autoIncrement: true }),
   categoryId: int().notNull().references(() => categories.id),
-  name: text().notNull(), // e.g., "Morning run", "Protein intake", "Piano practice"
-  type: text().notNull(), // "boolean", "number", "text", "duration"
-  unit: text(), // "km", "minutes", "grams", etc.
-  target: text(), // optional daily/weekly target
+  name: text().notNull(), // e.g., "Shopping List", "Running", "Movies"
+  icon: text().notNull(),
+  type: text().notNull(), // "list", "tracker", "journal"
   createdAt: text().notNull(),
 });
 
-// Daily entries for tracking
-export const entries = sqliteTable("entries", {
+// Items within subcategories (flexible for different types)
+export const items = sqliteTable("items", {
   id: int().primaryKey({ autoIncrement: true }),
-  trackableId: int().notNull().references(() => trackables.id),
-  date: text().notNull(), // YYYY-MM-DD format
-  value: text().notNull(), // flexible: can store "true", "5.2", "great session"
-  notes: text(), // optional personal notes
+  subcategoryId: int().notNull().references(() => subcategories.id),
+  title: text().notNull(),
+  description: text(),
+  value: text(), // flexible: can store numbers, booleans, text
+  date: text(), // for date-specific tracking
+  completed: int().default(0), // 0 or 1 for boolean
   createdAt: text().notNull(),
+  updatedAt: text().notNull(),
 });
 
-// Type inference for TypeScript
+// Type inference
 export type Category = typeof categories.$inferSelect;
-export type Trackable = typeof trackables.$inferSelect;
-export type Entry = typeof entries.$inferSelect;
+export type Subcategory = typeof subcategories.$inferSelect;
+export type Item = typeof items.$inferSelect;
