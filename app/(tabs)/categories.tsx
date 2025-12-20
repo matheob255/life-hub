@@ -2,8 +2,10 @@ import { eq } from 'drizzle-orm';
 import { useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { db } from '../../db/client';
+import { initDatabase } from '../../db/migrate';
 import type { Category } from '../../db/schema';
 import { categories } from '../../db/schema';
+import { seedCategories } from '../../db/seed';
 
 export default function CategoriesScreen() {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -12,6 +14,9 @@ export default function CategoriesScreen() {
   // Load categories from database
   const loadCategories = async () => {
     try {
+      await initDatabase();
+      await seedCategories(); // Add this line
+      
       const result = await db.select().from(categories);
       setCategoryList(result);
     } catch (error) {
