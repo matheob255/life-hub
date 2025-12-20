@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import SubcategoryList from '../../components/subcategories/SubcategoryList';
 import { initDatabase } from '../../db/migrate';
 import { seedData } from '../../db/seed';
+import SubcategoryList from '../../components/subcategories/SubcategoryList';
 
 export default function DailyScreen() {
   useEffect(() => {
@@ -12,5 +12,5 @@ export default function DailyScreen() {
     init();
   }, []);
 
-  return <SubcategoryList categoryId={1} categoryName="Daily" categoryColor="#FF6B6B" />;
+  return <SubcategoryList categoryId={1} categoryName="Daily" categoryColor="#6366f1" />;
 }

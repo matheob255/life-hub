@@ -1,27 +1,137 @@
 import { useLocalSearchParams } from 'expo-router';
 import ListDetail from '../../components/details/ListDetail';
-import TrackerDetail from '../../components/details/TrackerDetail';
-import JournalDetail from '../../components/details/JournalDetail';
+import TravelsDetail from '../../components/details/TravelsDetail';
+import TableDetail from '../../components/details/TableDetail';
+import BudgetDetail from '../../components/details/BudgetDetail';
+import ImportantDatesDetail from '../../components/details/ImportantDatesDetail';
 
-export default function SubcategoryDetail() {
-  const params = useLocalSearchParams();
-  const { type, id, name, icon, color } = params;
+export default function SubcategoryScreen() {
+  const params = useLocalSearchParams<{
+    id: string;
+    name: string;
+    icon: string;
+    color: string;
+    type: string;
+  }>();
 
-  const commonProps = {
-    subcategoryId: parseInt(id as string),
-    name: name as string,
-    icon: icon as string,
-    color: color as string,
-  };
+  const subcategoryId = Number(params.id);
+  const name = params.name ?? '';
+  const icon = params.icon ?? '';
+  const color = (params.color as string) ?? '#6366f1';
+  const type = params.type ?? 'list';
 
-  // Route to the appropriate detail screen
-  if (type === 'list') {
-    return <ListDetail {...commonProps} />;
-  } else if (type === 'tracker') {
-    return <TrackerDetail {...commonProps} />;
-  } else if (type === 'journal') {
-    return <JournalDetail {...commonProps} />;
+  // MOVIES / BOOKS / SNEAKERS / CONCERTS -> table view
+  if (name === 'Movies') {
+    return (
+      <TableDetail
+        subcategoryId={subcategoryId}
+        name={name}
+        icon={icon}
+        color={color}
+        columns={[
+          { key: 'title', label: 'Title', width: 2 },
+          { key: 'director', label: 'Director', width: 2 },
+          { key: 'grade', label: 'Grade', width: 1, align: 'center' },
+          { key: 'thoughts', label: 'Thoughts', width: 3 },
+        ]}
+      />
+    );
   }
 
-  return null;
+  if (name === 'Books') {
+    return (
+      <TableDetail
+        subcategoryId={subcategoryId}
+        name={name}
+        icon={icon}
+        color={color}
+        columns={[
+          { key: 'title', label: 'Title', width: 2 },
+          { key: 'author', label: 'Author', width: 2 },
+          { key: 'status', label: 'Status', width: 1, align: 'center' },
+          { key: 'thoughts', label: 'Thoughts', width: 3 },
+        ]}
+      />
+    );
+  }
+
+  if (name === 'Sneakers') {
+    return (
+      <TableDetail
+        subcategoryId={subcategoryId}
+        name={name}
+        icon={icon}
+        color={color}
+        columns={[
+          { key: 'title', label: 'Pair', width: 3 },
+          { key: 'brand', label: 'Brand / Model', width: 3 },
+          { key: 'size', label: 'Size', width: 1, align: 'center' },
+          { key: 'notes', label: 'Notes', width: 2 },
+        ]}
+      />
+    );
+  }
+
+  if (name === 'Concerts') {
+    return (
+      <TableDetail
+        subcategoryId={subcategoryId}
+        name={name}
+        icon={icon}
+        color={color}
+        columns={[
+          { key: 'artist', label: 'Artist', width: 3 },
+          { key: 'times', label: 'Times', width: 1, align: 'center' },
+          { key: 'where', label: 'Where', width: 3 },
+          { key: 'notes', label: 'Notes', width: 2 },
+        ]}
+      />
+    );
+  }
+
+  // TRAVELS
+  if (name === 'Travels') {
+    return (
+      <TravelsDetail
+        subcategoryId={subcategoryId}
+        name={name}
+        icon={icon}
+        color={color}
+      />
+    );
+  }
+
+  // MONTHLY BUDGET
+  if (name === 'Monthly Budget') {
+    return (
+      <BudgetDetail
+        subcategoryId={subcategoryId}
+        name={name}
+        icon={icon}
+        color={color}
+      />
+    );
+  }
+
+  // IMPORTANT DATES
+  if (name === 'Important Dates') {
+    return (
+      <ImportantDatesDetail
+        subcategoryId={subcategoryId}
+        name={name}
+        icon={icon}
+        color={color}
+      />
+    );
+  }
+
+  // DEFAULT: simple list (shopping, todos, etc.)
+  return (
+    <ListDetail
+      subcategoryId={subcategoryId}
+      name={name}
+      icon={icon}
+      color={color}
+    />
+  );
 }

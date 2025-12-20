@@ -33,39 +33,39 @@ export default function SubcategoryList({ categoryId, categoryName, categoryColo
   }, [categoryId]);
 
   const handleSubcategoryPress = (item: Subcategory) => {
-    // Navigate to detail screen based on type
-    router.push({
-      pathname: `/subcategory/${item.type}`,
-      params: { 
-        id: item.id,
-        name: item.name,
-        icon: item.icon,
-        color: categoryColor,
-        type: item.type,
-      }
-    });
+    router.push(
+      `/subcategory/${item.type}?id=${item.id}&name=${encodeURIComponent(
+        item.name,
+      )}&icon=${encodeURIComponent(item.icon)}&color=${encodeURIComponent(
+        categoryColor,
+      )}`,
+    );
   };
 
   const renderSubcategory = ({ item }: { item: Subcategory }) => (
-    <TouchableOpacity 
-      style={[styles.card, { borderLeftColor: categoryColor }]}
+    <TouchableOpacity
+      style={styles.cardContainer}
       onPress={() => handleSubcategoryPress(item)}
+      activeOpacity={0.85}
     >
-      <Text style={styles.icon}>{item.icon}</Text>
-      <View style={styles.info}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.type}>{item.type}</Text>
+      <View style={[styles.card, { borderLeftColor: categoryColor }]}>
+        <View style={styles.cardLeft}>
+          <Text style={styles.icon}>{item.icon}</Text>
+          <Text style={styles.name}>{item.name}</Text>
+        </View>
+        <Text style={[styles.typePill, { color: categoryColor, borderColor: categoryColor }]}>
+          {item.type}
+        </Text>
       </View>
-      <Text style={styles.chevron}>›</Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{categoryName}</Text>
-        <Text style={styles.subtitle}>
-          {subcategoryList.length} {subcategoryList.length === 1 ? 'item' : 'items'}
+      <View style={[styles.pageHeader, { backgroundColor: '#f9fafb' }]}>
+        <Text style={styles.pageTitle}>{categoryName}</Text>
+        <Text style={[styles.pageSubtitle, { color: categoryColor }]}>
+          {subcategoryList.length} {subcategoryList.length === 1 ? 'area' : 'areas'}
         </Text>
       </View>
 
@@ -80,64 +80,68 @@ export default function SubcategoryList({ categoryId, categoryName, categoryColo
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
-  header: {
-    padding: 20,
+  container: { flex: 1, backgroundColor: '#f3f4f6' },
+  pageHeader: {
     paddingTop: 60,
-    backgroundColor: '#fff',
+    paddingBottom: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E9ECEF',
+    borderBottomColor: '#e5e7eb',
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#212529',
-    marginBottom: 4,
+  pageTitle: {
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#111827',
+    letterSpacing: -0.5,
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#6C757D',
+  pageSubtitle: {
+    marginTop: 4,
+    fontSize: 13,
+    fontWeight: '600',
   },
   list: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  cardContainer: {
+    marginBottom: 10,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     borderLeftWidth: 4,
+    borderLeftColor: '#6366f1',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  cardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
-    fontSize: 32,
-    marginRight: 16,
-  },
-  info: {
-    flex: 1,
+    fontSize: 24,
+    marginRight: 10,
   },
   name: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
-    color: '#212529',
-    marginBottom: 4,
+    color: '#111827',
   },
-  type: {
-    fontSize: 13,
-    color: '#6C757D',
-    textTransform: 'capitalize',
-  },
-  chevron: {
-    fontSize: 24,
-    color: '#ADB5BD',
+  typePill: {
+    fontSize: 11,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
   },
 });

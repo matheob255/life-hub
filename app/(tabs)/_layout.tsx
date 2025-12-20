@@ -1,16 +1,35 @@
-import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#007AFF',
         headerShown: false,
+        tabBarActiveTintColor: '#111827',
+        tabBarInactiveTintColor: '#9ca3af',
         tabBarStyle: {
-          height: 60,
-          paddingBottom: 8,
+          height: Platform.OS === 'ios' ? 88 : 64,
+          paddingBottom: Platform.OS === 'ios' ? 26 : 10,
+          paddingTop: 8,
+          backgroundColor: '#ffffff',
+          borderTopWidth: 0.5,
+          borderTopColor: '#e5e7eb',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.05,
+          shadowRadius: 10,
+          elevation: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '600',
+          letterSpacing: 0.3,
+        },
+        tabBarIconStyle: {
+          marginTop: 2,
         },
       }}
     >
@@ -18,8 +37,13 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Daily',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="calendar" size={24} color={color} />
+          href: '/',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'today' : 'today-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -27,8 +51,12 @@ export default function TabLayout() {
         name="nutrition"
         options={{
           title: 'Nutrition',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="restaurant" size={24} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'nutrition' : 'nutrition-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -36,8 +64,12 @@ export default function TabLayout() {
         name="sport"
         options={{
           title: 'Sport',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="fitness" size={24} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'barbell' : 'barbell-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
@@ -45,18 +77,36 @@ export default function TabLayout() {
         name="culture"
         options={{
           title: 'Culture',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="book" size={24} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'library' : 'library-outline'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="others"
         options={{
-          title: 'Others',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="apps" size={24} color={color} />
+          title: 'More',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={
+                focused
+                  ? 'ellipsis-horizontal-circle'
+                  : 'ellipsis-horizontal-circle-outline'
+              }
+              size={24}
+              color={color}
+            />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="daily"
+        options={{
+          href: null,
         }}
       />
     </Tabs>

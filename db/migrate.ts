@@ -4,8 +4,6 @@ import { sql } from 'drizzle-orm';
 export async function initDatabase() {
   try {
     // Drop old tables if they exist
-    await db.run(sql`DROP TABLE IF EXISTS entries`);
-    await db.run(sql`DROP TABLE IF EXISTS trackables`);
     await db.run(sql`DROP TABLE IF EXISTS items`);
     await db.run(sql`DROP TABLE IF EXISTS subcategories`);
     await db.run(sql`DROP TABLE IF EXISTS categories`);
@@ -37,7 +35,7 @@ export async function initDatabase() {
       )
     `);
 
-    // Create items table
+    // Create items table with new fields
     await db.run(sql`
       CREATE TABLE IF NOT EXISTS items (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,6 +45,9 @@ export async function initDatabase() {
         value TEXT,
         date TEXT,
         completed INTEGER DEFAULT 0,
+        urgency TEXT,
+        transactionType TEXT,
+        amount TEXT,
         createdAt TEXT NOT NULL,
         updatedAt TEXT NOT NULL,
         FOREIGN KEY (subcategoryId) REFERENCES subcategories(id)
