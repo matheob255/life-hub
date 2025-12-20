@@ -1,9 +1,10 @@
-import { db } from '@/db/client';
-import type { Subcategory } from '@/db/schema';
-import { subcategories } from '@/db/schema';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'expo-router';
+import { db } from '../../db/client';
+import { subcategories } from '../../db/schema';
+import type { Subcategory } from '../../db/schema';
 import { eq } from 'drizzle-orm';
-import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface SubcategoryListProps {
   categoryId: number;
@@ -13,6 +14,7 @@ interface SubcategoryListProps {
 
 export default function SubcategoryList({ categoryId, categoryName, categoryColor }: SubcategoryListProps) {
   const [subcategoryList, setSubcategoryList] = useState<Subcategory[]>([]);
+  const router = useRouter();
 
   const loadSubcategories = async () => {
     try {
@@ -30,8 +32,25 @@ export default function SubcategoryList({ categoryId, categoryName, categoryColo
     loadSubcategories();
   }, [categoryId]);
 
+  const handleSubcategoryPress = (item: Subcategory) => {
+    // Navigate to detail screen based on type
+    router.push({
+      pathname: `/subcategory/${item.type}`,
+      params: { 
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+        color: categoryColor,
+        type: item.type,
+      }
+    });
+  };
+
   const renderSubcategory = ({ item }: { item: Subcategory }) => (
-    <TouchableOpacity style={[styles.card, { borderLeftColor: categoryColor }]}>
+    <TouchableOpacity 
+      style={[styles.card, { borderLeftColor: categoryColor }]}
+      onPress={() => handleSubcategoryPress(item)}
+    >
       <Text style={styles.icon}>{item.icon}</Text>
       <View style={styles.info}>
         <Text style={styles.name}>{item.name}</Text>
