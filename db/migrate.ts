@@ -1,8 +1,17 @@
-import { sql } from 'drizzle-orm';
 import { db } from './client';
+import { sql } from 'drizzle-orm';
 
 export async function initDatabase() {
   try {
+    // Drop old tables if they exist
+    await db.run(sql`DROP TABLE IF EXISTS entries`);
+    await db.run(sql`DROP TABLE IF EXISTS trackables`);
+    await db.run(sql`DROP TABLE IF EXISTS items`);
+    await db.run(sql`DROP TABLE IF EXISTS subcategories`);
+    await db.run(sql`DROP TABLE IF EXISTS categories`);
+
+    console.log('✓ Old tables dropped');
+
     // Create categories table
     await db.run(sql`
       CREATE TABLE IF NOT EXISTS categories (

@@ -3,13 +3,6 @@ import { categories, subcategories } from './schema';
 
 export async function seedData() {
   try {
-    // Check if already seeded
-    const existing = await db.select().from(categories);
-    if (existing.length > 0) {
-      console.log('Data already seeded');
-      return;
-    }
-
     // Insert main categories (tabs)
     const categoryData = [
       { id: 1, name: "Daily", icon: "📅", color: "#FF6B6B", order: 1 },
