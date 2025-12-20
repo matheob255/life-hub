@@ -55,37 +55,16 @@ export default function TabLayout() {
           title: 'Tab Two',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
-      />
-    </Tabs>
-  );
-}
-
-export default function TabLayout() {
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: '#007AFF',
-        headerShown: false,
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Today',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="today" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="categories"
-        options={{
-          title: 'Categories',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="grid" size={size} color={color} />
-          ),
-        }}
-      />
+        />
+        <Tabs.Screen
+          name="categories"
+          options={{
+            title: 'Categories',
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="grid" size={size} color={color} />
+            ),
+          }}
+        />
     </Tabs>
   );
 }
